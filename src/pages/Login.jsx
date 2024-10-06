@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { loginUser } from "../config/firebase/firebasemethods";
+import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -9,11 +10,14 @@ import {
   CardContent,
   Container,
   Grid,
+  Link,
   TextField,
   Typography,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -28,17 +32,23 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleLogin = async (data) => {
+    setLoading(true);
     try {
       const userLogin = await loginUser({
         email: data.email,
         password: data.password,
       });
       console.log(userLogin);
-      navigate("/home", { replace: true }); // Navigate to home page
+      navigate("/", { replace: true }); // Navigate to home page
     } catch (error) {
       console.error(error);
+      // Display an error message to the user
+      alert("Login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,11 +57,14 @@ const Login = () => {
       maxWidth={false}
       sx={{
         height: "50vh",
-        // width: "600px",
         padding: "200px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        [theme.breakpoints.down("sm")]: {
+          // adjust container for mobile size
+          padding: "100px",
+        },
       }}
     >
       <Card
@@ -84,9 +97,28 @@ const Login = () => {
             <span className="text-danger">This field is required</span>
           )}
           <br />
-          <Button variant="contained" type="submit">
-            Login
+          <Button
+            sx={{ background: "purple" }}
+            variant="contained"
+            type="submit"
+          >
+            {loading ? <CircularProgress size={24} /> : "Login"}
           </Button>
+          <Typography sx={{ mt: 2 }}>
+            Don't have an account?{" "}
+            <Link
+              sx={{
+                color: "purple",
+                fontWeight: "600",
+                fontSize: "20px",
+                textDecoration: "none",
+              }}
+              component="button"
+              onClick={() => navigate("/register")}
+            >
+              Register
+            </Link>
+          </Typography>
         </form>
       </Card>
     </Container>

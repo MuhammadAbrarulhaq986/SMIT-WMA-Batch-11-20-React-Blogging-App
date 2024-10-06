@@ -18,10 +18,12 @@ import {
   getCurrentUser,
   init,
 } from "../config/firebase/firebasemethods";
+import Stack from "@mui/material/Stack";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [isUser, setIsUser] = React.useState(false); // Initialize isUser to false
+  const [isUser, setIsUser] = React.useState(false); // Initialize isUser     to false
+  const [user, setUser] = React.useState({}); // Add this line
   const [isActive, setIsActive] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
@@ -32,6 +34,7 @@ const Navbar = () => {
       const user = await getCurrentUser();
       if (user) {
         setIsUser(true);
+        setUser(user); // Add this line
       }
     };
     checkUser();
@@ -56,9 +59,54 @@ const Navbar = () => {
     { label: "Dashboard", link: "/dashboard" },
     { label: "Profile", link: "/profile" },
     { label: "Home", link: "/" },
-    { label: "Login", link: "/login" },
-    { label: "Register", link: "/register" },
   ];
+
+  const authItems = isUser
+    ? [
+        {
+          label: (
+            <Stack direction="row" spacing={1}>
+              <Avatar src={user.photoURL} alt={user.displayName} />
+              <Typography variant="h6">{user.displayName}</Typography>
+              <Button
+                key="logout"
+                onClick={logoutUser}
+                sx={{
+                  my: 2,
+                  display: "block",
+                  color: "purple",
+                  fontWeight: "600",
+                }}
+              >
+                Logout
+              </Button>
+            </Stack>
+          ),
+        },
+      ]
+    : [
+        { label: "Login", link: "/login", onClick: () => navigate("/login") },
+        {
+          label: "Register",
+          link: "/register",
+          onClick: () => navigate("/register"),
+        },
+      ];
+
+  // Update isUser     state when user logs in
+  React.useEffect(() => {
+    const checkUser = async () => {
+      await init();
+      const user = await getCurrentUser();
+      if (user) {
+        setIsUser(true);
+        setUser(user);
+      } else {
+        setIsUser(false);
+      }
+    };
+    checkUser();
+  }, [navigate]);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "purple" }}>
@@ -117,7 +165,7 @@ const Navbar = () => {
                   className="navbar-item"
                   sx={{
                     textDecoration: "none",
-                    color: " white",
+                    color: " purple",
                   }}
                 >
                   <MenuItem onClick={handleCloseNavMenu}>
@@ -127,13 +175,16 @@ const Navbar = () => {
                   </MenuItem>
                 </Link>
               ))}
-              {isUser && (
-                <MenuItem onClick={logoutUser}>
+              {authItems.map((item, index) => (
+                <MenuItem
+                  key={index}
+                  onClick={item.onClick ? item.onClick : handleCloseNavMenu}
+                >
                   <Typography sx={{ textAlign: "center" }}>
-                    <b>Logout</b>
+                    <b>{item.label}</b>
                   </Typography>
                 </MenuItem>
-              )}
+              ))}
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
@@ -144,27 +195,27 @@ const Navbar = () => {
                 className="navbar-item"
                 sx={{
                   textDecoration: "none",
-                  color: "white",
+                  color: "purple",
                 }}
               >
                 <Button
                   key={item.label}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, display: "block", color: "white" }}
+                  sx={{ my: 2, display: "block", color: "purple" }}
                 >
                   <b>{item.label}</b>
                 </Button>
               </Link>
             ))}
-            {isUser && (
+            {authItems.map((item, index) => (
               <Button
-                key="Logout"
-                onClick={logoutUser}
-                sx={{ my: 2, color: "white", display: "block" }}
+                key={index}
+                onClick={item.onClick ? item.onClick : handleCloseNavMenu}
+                sx={{ my: 2, display: "block", color: "purple" }}
               >
-                <b>Logout</b>
+                {item.label}
               </Button>
-            )}
+            ))}
           </Box>
         </Toolbar>
       </Container>

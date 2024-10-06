@@ -7,8 +7,11 @@ import {
   CardContent,
   Container,
   Grid,
+  Link,
   TextField,
   Typography,
+  CircularProgress,
+  styled,
 } from "@mui/material";
 
 const Register = () => {
@@ -22,8 +25,11 @@ const Register = () => {
     message: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleRegister = async (event) => {
     event.preventDefault();
+    setLoading(true);
     console.log(email.current.value);
     console.log(password.current.value);
     console.log(fullName.current.value);
@@ -52,8 +58,22 @@ const Register = () => {
         success: false,
         message: "Registration failed. Please try again.",
       });
+    } finally {
+      setLoading(false);
     }
   };
+
+  const FileInput = styled("input")({
+    display: "none",
+  });
+
+  const FileInputLabel = styled(Button)({
+    backgroundColor: "purple",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "purple",
+    },
+  });
 
   return (
     <Container
@@ -95,16 +115,49 @@ const Register = () => {
             inputRef={password}
           />
           <br />
-          <input
-            type="file"
-            placeholder="Enter your profile picture"
-            ref={profileImage}
-            style={{ width: "100%" }}
-          />
-          <br /> <br />
-          <Button variant="contained" type="submit">
-            Register
+          <Button
+            component="label"
+            sx={{
+              backgroundColor: "purple",
+              color: "white",
+              "&:hover": { backgroundColor: "purple" },
+            }}
+          >
+            Choose File
+            <input
+              type="file"
+              placeholder="Enter your profile picture"
+              ref={profileImage}
+              style={{ display: "none" }}
+            />
           </Button>
+          <br /> <br />
+          <Button
+            variant="contained"
+            type="submit"
+            sx={{ backgroundColor: "purple", color: "white" }}
+            disabled={loading}
+          >
+            {loading ? (
+              <CircularProgress size={24} sx={{ color: "white" }} />
+            ) : (
+              "Register"
+            )}
+          </Button>
+          <Typography sx={{ mt: 2 }}>
+            Already have an account?
+            <Link
+              href="/login"
+              sx={{
+                color: "purple",
+                fontWeight: "600",
+                fontSize: "20px",
+                textDecoration: "none",
+              }}
+            >
+              Login
+            </Link>
+          </Typography>
           {registrationStatus.success && (
             <Typography variant="body1" sx={{ color: "green", mt: 2 }}>
               {registrationStatus.message}

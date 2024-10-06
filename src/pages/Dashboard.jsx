@@ -85,7 +85,15 @@ const Dashboard = () => {
       <Grid container spacing={2} sx={{ mt: 5 }}>
         <Grid item xs={12} md={6}>
           <Card sx={{ p: 3 }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>
+            <Typography
+              variant="h5"
+              sx={{
+                mb: 2,
+                textAlign: "center",
+                fontWeight: "600",
+                textShadow: "0px 0px 5px rgba(128, 0, 128, 0.8)",
+              }}
+            >
               Add New Blog
             </Typography>
             <form onSubmit={handleSubmit(sendDatatoFirestore)}>
@@ -108,7 +116,12 @@ const Dashboard = () => {
               />
               {errors.description && <span>This field is required</span>}
               {error && <span style={{ color: "red" }}>{error}</span>}
-              <Button variant="contained" type="submit" disabled={submitting}>
+              <Button
+                sx={{ background: "purple" }}
+                variant="contained"
+                type="submit"
+                disabled={submitting}
+              >
                 {submitting ? "Submitting..." : "Add Blog"}
               </Button>
             </form>
