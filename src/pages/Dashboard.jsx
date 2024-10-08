@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { auth, getData, sendData } from "../config/firebase/firebasemethods";
+import {
+  auth,
+  getData,
+  sendData,
+  deleteDocument,
+} from "../config/firebase/firebasemethods";
 import { onAuthStateChanged } from "firebase/auth";
 import {
   Box,
@@ -13,7 +18,9 @@ import {
   TextField,
   Typography,
   Avatar,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const Dashboard = () => {
   const {
@@ -54,29 +61,43 @@ const Dashboard = () => {
     try {
       if (auth.currentUser) {
         setSubmitting(true);
-        const response = await sendData(
+        await sendData(
           {
             title: data.title,
             description: data.description,
             uid: auth.currentUser.uid,
           },
           "blogs"
-        );
-        const newBlog = {
-          title: data.title,
-          description: data.description,
-          uid: auth.currentUser.uid,
-        };
-        setBlogs((prevBlogs) => [...prevBlogs, newBlog]);
-        console.log(response);
-        setSubmitting(false);
-        reset();
+        ).then((response) => {
+          const newBlog = {
+            title: data.title,
+            description: data.description,
+            uid: auth.currentUser.uid,
+          };
+          setBlogs((prevBlogs) => [...prevBlogs, newBlog]);
+          console.log(response);
+          setSubmitting(false);
+          reset();
+        });
       } else {
-        setError("User     is not authenticated");
+        setError("User   is not authenticated");
       }
     } catch (error) {
       setError(error.message);
       setSubmitting(false);
+    }
+  };
+
+  const handleDeleteBlog = async (blog) => {
+    try {
+      if (blog.documentId) {
+        await deleteDocument("blogs", blog.documentId);
+        setBlogs(blogs.filter((item) => item.documentId !== blog.documentId));
+      } else {
+        console.error("Blog ID is missing");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -158,6 +179,12 @@ const Dashboard = () => {
                           By {auth.currentUser.displayName} on{" "}
                           {new Date().toLocaleDateString()}
                         </Typography>
+                        <IconButton
+                          aria-label="delete"
+                          onClick={() => handleDeleteBlog(item)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
                       </Box>
                     </CardContent>
                   </Card>

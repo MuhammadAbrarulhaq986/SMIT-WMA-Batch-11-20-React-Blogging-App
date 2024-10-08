@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { loginUser } from "../config/firebase/firebasemethods";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
@@ -33,15 +33,18 @@ const Login = () => {
 
   const navigate = useNavigate();
   const theme = useTheme();
+  const auth = getAuth();
 
   const handleLogin = async (data) => {
     setLoading(true);
     try {
-      const userLogin = await loginUser({
-        email: data.email,
-        password: data.password,
-      });
-      console.log(userLogin);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      const user = userCredential.user;
+      console.log(user);
       navigate("/", { replace: true }); // Navigate to home page
     } catch (error) {
       console.error(error);
@@ -54,11 +57,13 @@ const Login = () => {
 
   return (
     <Container
-      maxWidth={false}
+      maxWidth={600}
+      minWidth={300}
       sx={{
         height: "50vh",
         padding: "200px",
         display: "flex",
+        textAlign: "center",
         justifyContent: "center",
         alignItems: "center",
         [theme.breakpoints.down("sm")]: {
@@ -68,9 +73,24 @@ const Login = () => {
       }}
     >
       <Card
-        sx={{ p: 4, maxWidth: 900, minWidth: 500, justifyContent: "center" }}
+        sx={{
+          p: 4,
+          maxWidth: 600,
+          minWidth: 300,
+          justifyContent: "center",
+          boxShadow: "0px 0px 10px 2px rgba(128, 0, 128, 0.5)", // purple color box shadow
+        }}
       >
-        <Typography variant="h5" sx={{ mb: 3, fontWeight: "bold" }}>
+        <Typography
+          variant="h5"
+          sx={{
+            mb: 3,
+            fontSize: "30px",
+            fontWeight: "bold",
+            // textShadow: "1px 5px 10px purple", // add this line
+            textAlign: "center",
+          }}
+        >
           <b>Login</b>
         </Typography>
         <form onSubmit={handleSubmit(handleLogin)}>
@@ -79,6 +99,7 @@ const Login = () => {
             variant="outlined"
             fullWidth
             sx={{ mb: 4, alignItems: "center" }}
+            size="small"
             {...register("email", { required: true })}
           />
           {errors.email && (
@@ -91,6 +112,7 @@ const Login = () => {
             fullWidth
             type="password"
             sx={{ mb: 2 }}
+            size="small"
             {...register("password", { required: true })}
           />
           {errors.password && (
@@ -98,27 +120,20 @@ const Login = () => {
           )}
           <br />
           <Button
-            sx={{ background: "purple" }}
+            sx={{
+              background: "purple",
+              boxShadow: "0px 0px 10px 2px rgba(128, 0, 128, 0.5)", // purple color box shadow
+            }}
             variant="contained"
             type="submit"
+            size="small"
           >
-            {loading ? <CircularProgress size={24} /> : "Login"}
+            {loading ? (
+              <CircularProgress size={30} sx={{ color: "white" }} />
+            ) : (
+              "Login"
+            )}
           </Button>
-          <Typography sx={{ mt: 2 }}>
-            Don't have an account?{" "}
-            <Link
-              sx={{
-                color: "purple",
-                fontWeight: "600",
-                fontSize: "20px",
-                textDecoration: "none",
-              }}
-              component="button"
-              onClick={() => navigate("/register")}
-            >
-              Register
-            </Link>
-          </Typography>
         </form>
       </Card>
     </Container>

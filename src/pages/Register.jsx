@@ -82,11 +82,27 @@ const Register = () => {
         height: "100vh",
         display: "flex",
         justifyContent: "center",
+        textAlign: "center",
         alignItems: "center",
       }}
     >
-      <Card sx={{ p: 4, maxWidth: 400 }}>
-        <Typography variant="h5" sx={{ mb: 3, fontWeight: "bold" }}>
+      <Card
+        sx={{
+          p: 4,
+          maxWidth: 400,
+          boxShadow: "0px 0px 10px 2px rgba(128, 0, 128, 0.5)", // purple box shadow
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            mb: 3,
+            fontSize: "30px",
+            fontWeight: "bold",
+            // textShadow: "0px 0px 5px purple", // add this line
+            textAlign: "center", // add this line
+          }}
+        >
           Register
         </Typography>
         <form onSubmit={handleRegister}>
@@ -139,25 +155,11 @@ const Register = () => {
             disabled={loading}
           >
             {loading ? (
-              <CircularProgress size={24} sx={{ color: "white" }} />
+              <CircularProgress size={30} sx={{ color: "Purple" }} />
             ) : (
               "Register"
             )}
           </Button>
-          <Typography sx={{ mt: 2 }}>
-            Already have an account?
-            <Link
-              href="/login"
-              sx={{
-                color: "purple",
-                fontWeight: "600",
-                fontSize: "20px",
-                textDecoration: "none",
-              }}
-            >
-              Login
-            </Link>
-          </Typography>
           {registrationStatus.success && (
             <Typography variant="body1" sx={{ color: "green", mt: 2 }}>
               {registrationStatus.message}
