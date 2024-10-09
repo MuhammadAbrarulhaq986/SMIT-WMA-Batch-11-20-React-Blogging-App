@@ -1,259 +1,87 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  signOutUser,
-  getCurrentUser,
-  init,
-} from "../config/firebase/firebasemethods";
-import { useMemo, useState, useEffect } from "react";
+import React from "react";
 
-// Define the Navbar component
-const Navbar = () => {
-  // Initialize the navigate hook to navigate between routes
-  const navigate = useNavigate();
-
-  // Initialize the state to track if the user is logged in
-  const [isUser, setIsUser] = React.useState(false);
-
-  // Initialize the state to store the user data
-  const [user, setUser] = React.useState({});
-
-  // Initialize the state to store the anchor element for the menu
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-
-  // Initialize the state to store the authentication items
-  const [authItems, setAuthItems] = React.useState([]);
-
-  // Check if the user is logged in when the component mounts
-  React.useEffect(() => {
-    const checkUser = async () => {
-      // Initialize the Firebase app
-      await init();
-
-      // Get the current user
-      const user = await getCurrentUser();
-
-      // If the user is logged in, update the state
-      if (user) {
-        setIsUser(true);
-        setUser(user);
-      }
-    };
-    checkUser();
-  }, []);
-
-  // Define the function to handle logout
-  const logoutUser = async () => {
-    try {
-      console.log(logoutUser);
-      // Sign out the user
-      await signOutUser();
-
-      // Update the state to indicate that the user is not logged in
-      setIsUser(false);
-
-      // Navigate to the login page
-      navigate("/login");
-    } catch (error) {
-      console.error("Error signing out user:", error);
-    }
-  };
-
-  // Define the function to handle opening the navigation menu
-  const handleOpenNavMenu = (event) => {
-    // Set the anchor element for the menu
-    setAnchorElNav(event.currentTarget);
-  };
-
-  // Define the function to handle closing the navigation menu
-  const handleCloseNavMenu = () => {
-    // Reset the anchor element for the menu
-    setAnchorElNav(null);
-  };
-
-  // Define the navigation items
-  const navbarItems = [
-    { label: "Dashboard", link: "/dashboard" },
-    { label: "Profile", link: "/profile" },
-    { label: "Home", link: "/" },
-    // { label: "Logout ", link: "/" },
-  ];
-
-  // Update the authItems state when the isUser    state changes
-  useEffect(() => {
-    const authItems = [];
-    if (isUser) {
-      authItems.push({ label: "Logout", onClick: () => logoutUser() });
-    } else {
-      authItems.push(
-        { label: "Login", link: "/login", onClick: () => navigate("/login") },
-        {
-          label: "Register",
-          link: "/register",
-          onClick: () => navigate("/register"),
-        }
-      );
-    }
-    setAuthItems(authItems);
-  }, [isUser, navigate, logoutUser]);
-
-  // Update the isUser    state when the user logs in
-  useEffect(() => {
-    const checkUser = async () => {
-      // Initialize the Firebase app
-      await init();
-
-      // Get the current user
-      const user = await getCurrentUser();
-
-      // If the user is logged in, update the state
-      if (user) {
-        setIsUser(true);
-        setUser(user);
-      } else {
-        setIsUser(false);
-      }
-    };
-    checkUser();
-  }, [navigate, logoutUser]);
-
-  // Return the JSX for the Navbar component
+function Navbar() {
   return (
-    <AppBar position="static" sx={{ backgroundColor: "purple" }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: "block", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "white",
-              textDecoration: "none",
-              fontSize: "1.2rem",
-            }}
-          >
-            <b>Bolg</b>
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: " none" } }}>
-            <IconButton
-              size=" large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
+    <>
+      <div className="navbar bg-base-100">
+        <div className="flex-1">
+          <a className="btn btn-ghost text-xl">daisyUI</a>
+        </div>
+        <div className="flex-none">
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle"
             >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              <div className="indicator">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+                <span className="badge badge-sm indicator-item">8</span>
+              </div>
+            </div>
+            <div
+              tabIndex={0}
+              className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
             >
-              {navbarItems.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={item.onClick ? item.onClick : handleCloseNavMenu}
-                >
-                  <Typography sx={{ textAlign: "center", fontWeight: "bold" }}>
-                    {item.label}
-                  </Typography>
-                </MenuItem>
-              ))}
-              {authItems.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  onClick={item.onClick ? item.onClick : handleCloseNavMenu}
-                >
-                  <Typography sx={{ textAlign: "center", fontWeight: "bold" }}>
-                    {item.label}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-          <Typography
-            variant="h5"
-            noWrap
-            component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "white",
-              textDecoration: "none",
-            }}
-          >
-            <b>Bolg</b>
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {navbarItems.map((item, index) => (
-              <Button
-                key={index}
-                onClick={
-                  item.onClick ? item.onClick : () => navigate(item.link)
-                }
-                sx={{
-                  my: 2,
-                  display: "block",
-                  color: "white",
-                  fontWeight: "600",
-                }}
-              >
-                {item.label}
-              </Button>
-            ))}
-            {authItems.map((item, index) => (
-              <Button
-                key={index}
-                onClick={item.onClick}
-                sx={{
-                  my: 2,
-                  display: "block",
-                  color: "white",
-                  fontWeight: "600",
-                }}
-              >
-                {item.label}
-              </Button>
-            ))}
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+              <div className="card-body">
+                <span className="text-lg font-bold">8 Items</span>
+                <span className="text-info">Subtotal: $999</span>
+                <div className="card-actions">
+                  <button className="btn btn-primary btn-block">
+                    View cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img
+                  alt="Tailwind CSS Navbar component"
+                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                />
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            >
+              <li>
+                <a className="justify-between">
+                  Profile
+                  <span className="badge">New</span>
+                </a>
+              </li>
+              <li>
+                <a>Settings</a>
+              </li>
+              <li>
+                <a>Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </>
   );
-};
+}
 
 export default Navbar;

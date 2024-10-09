@@ -1,178 +1,86 @@
-import React, { useState } from "react";
-import { signUpUser, uploadImage } from "../config/firebase/firebasemethods";
+import React, { useRef, useState } from "react";
 import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-  CircularProgress,
-  styled,
-} from "@mui/material";
+  addDatainDb,
+  signUpUser,
+  uploadImage,
+} from "../config/firebase/firebasemethods";
+import { data } from "autoprefixer";
 
 const Register = () => {
-  const fullName = React.useRef();
-  const email = React.useRef();
-  const password = React.useRef();
-  const profileImage = React.useRef();
+  const fullName = useRef();
+  const email = useRef();
+  const password = useRef();
+  const profileImage = useRef();
 
-  const [registrationStatus, setRegistrationStatus] = useState({
-    success: false,
-    message: "",
-  });
+  const [registrationStatus, setRegistrationStatus] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
+  // Handle Form Submission
+  const handleRegister = async (data) => {
     setLoading(true);
     console.log(email.current.value);
     console.log(password.current.value);
     console.log(fullName.current.value);
-    console.log(profileImage.current.files[0]);
-
-    const userProfileImageUrl = await uploadImage(
-      profileImage.current.files[0],
-      email.current.value
-    );
-
+    console.log(profileImage.current?.files[0]);
     try {
-      const userData = await signUpUser({
-        email: email.current.value,
-        password: password.current.value,
-        fullName: fullName.current.value,
-        profileImage: userProfileImageUrl,
-      });
-      console.log(userData);
-      setRegistrationStatus({
-        success: true,
-        message: "Registration successful!",
-      });
+      const user = await signUpUser(data.email, data.password);
+      console.log(user);
+      const dataInDb = await addDatainDb("users", user.uid, {});
     } catch (error) {
-      console.error(error);
-      setRegistrationStatus({
-        success: false,
-        message: "Registration failed. Please try again.",
-      });
-    } finally {
-      setLoading(false);
+      console.log(error);
     }
   };
 
-  const FileInput = styled("input")({
-    display: "none",
-  });
-
-  const FileInputLabel = styled(Button)({
-    backgroundColor: "purple",
-    color: "white",
-    "&:hover": {
-      backgroundColor: "purple",
-    },
-  });
-
   return (
-    <Container
-      maxWidth="lg"
-      sx={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        textAlign: "center",
-        alignItems: "center",
-      }}
-    >
-      <Card
-        sx={{
-          p: 4,
-          maxWidth: 400,
-          boxShadow: "0px 0px 10px 2px rgba(128, 0, 128, 0.5)", // purple box shadow
-        }}
-      >
-        <Typography
-          variant="h5"
-          sx={{
-            mb: 3,
-            fontSize: "30px",
-            fontWeight: "bold",
-            // textShadow: "0px 0px 5px purple", // add this line
-            textAlign: "center", // add this line
-          }}
-        >
-          Register
-        </Typography>
+    <div className="h-screen flex justify-center items-center">
+      <div className="max-w-md p-4 bg-white rounded shadow-md">
+        <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
         <form onSubmit={handleRegister}>
-          <TextField
-            label="Full Name"
-            variant="outlined"
-            fullWidth
-            sx={{ mb: 2 }}
-            inputRef={fullName}
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full p-2 mb-2 border border-gray-400 rounded"
           />
           <br />
-          <TextField
-            label="Email"
-            variant="outlined"
-            fullWidth
-            sx={{ mb: 2 }}
-            inputRef={email}
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-2 mb-2 border border-gray-400 rounded"
           />
           <br />
-          <TextField
-            label="Password"
-            variant="outlined"
-            fullWidth
+          <input
             type="password"
-            sx={{ mb: 2 }}
-            inputRef={password}
+            placeholder="Password"
+            className="w-full p-2 mb-2 border border-gray-400 rounded"
           />
           <br />
-          <Button
-            component="label"
-            sx={{
-              backgroundColor: "purple",
-              color: "white",
-              "&:hover": { backgroundColor: "purple" },
-            }}
-          >
-            Choose File
-            <input
-              type="file"
-              placeholder="Enter your profile picture"
-              ref={profileImage}
-              style={{ display: "none" }}
-            />
-          </Button>
+          <input
+            type="file"
+            placeholder="Enter your profile picture"
+            ref={profileImage}
+            className="w-full p-2 mb-2 border border-gray-400 rounded"
+          />
           <br /> <br />
-          <Button
-            variant="contained"
+          <button
             type="submit"
-            sx={{ backgroundColor: "purple", color: "white" }}
+            className="bg-purple-500 text-white p-2 rounded disabled:bg-gray-400"
             disabled={loading}
           >
             {loading ? (
-              <CircularProgress size={30} sx={{ color: "Purple" }} />
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-purple-500"></div>
             ) : (
               "Register"
             )}
-          </Button>
-          {registrationStatus.success && (
-            <Typography variant="body1" sx={{ color: "green", mt: 2 }}>
-              {registrationStatus.message}
-            </Typography>
-          )}
-          {!registrationStatus.success && registrationStatus.message && (
-            <Typography variant="body1" sx={{ color: "red", mt: 2 }}>
-              {registrationStatus.message}
-            </Typography>
-          )}
+          </button>
+          <p className="text-green-500 mt-2">
+            {registrationStatus
+              ? "Registered Successfully"
+              : "Registration failed"}
+          </p>
         </form>
-      </Card>
-    </Container>
+      </div>
+    </div>
   );
 };
 

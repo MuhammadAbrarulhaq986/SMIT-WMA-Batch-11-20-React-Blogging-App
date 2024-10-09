@@ -1,23 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { auth } from "../config/firebase/firebaseconfig";
 import { useForm } from "react-hook-form";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-
+import { addDatainDb, signInUser } from "../config/firebase/firebasemethods";
 const Login = () => {
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkUser = () => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const uid = user.uid;
+          console.log("User Found");
+          navigate("/home");
+        } else {
+          console.log("User Not Found");
+        }
+      });
+    };
+    checkUser();
+  }, []);
   const {
     register,
     handleSubmit,
@@ -30,113 +32,59 @@ const Login = () => {
       password: "",
     },
   });
-
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const auth = getAuth();
-
+  // Handling Form Submit 
   const handleLogin = async (data) => {
     setLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-      const user = userCredential.user;
-      console.log(user);
-      navigate("/", { replace: true }); // Navigate to home page
-    } catch (error) {
-      console.error(error);
-      // Display an error message to the user
-      alert("Login failed. Please try again.");
-    } finally {
-      setLoading(false);
+      const user = await signInUser(data?.email , data?.password);
+      console.log("Sign In Successfully" + user.uid);
+    }catch(error){
+      console.log(error);
+    }finally{
+      reset();
+      navigate("/home");
     }
   };
 
   return (
-    <Container
-      maxWidth={600}
-      minWidth={300}
-      sx={{
-        height: "50vh",
-        padding: "200px",
-        display: "flex",
-        textAlign: "center",
-        justifyContent: "center",
-        alignItems: "center",
-        [theme.breakpoints.down("sm")]: {
-          // adjust container for mobile size
-          padding: "100px",
-        },
-      }}
-    >
-      <Card
-        sx={{
-          p: 4,
-          maxWidth: 600,
-          minWidth: 300,
-          justifyContent: "center",
-          boxShadow: "0px 0px 10px 2px rgba(128, 0, 128, 0.5)", // purple color box shadow
-        }}
-      >
-        <Typography
-          variant="h5"
-          sx={{
-            mb: 3,
-            fontSize: "30px",
-            fontWeight: "bold",
-            // textShadow: "1px 5px 10px purple", // add this line
-            textAlign: "center",
-          }}
-        >
-          <b>Login</b>
-        </Typography>
+    <div className="h-screen flex justify-center items-center">
+      <div className="max-w-md p-4 bg-white rounded shadow-md">
+        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
         <form onSubmit={handleSubmit(handleLogin)}>
-          <TextField
-            label="Email"
-            variant="outlined"
-            fullWidth
-            sx={{ mb: 4, alignItems: "center" }}
-            size="small"
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-2 mb-2 border border-gray-400 rounded"
             {...register("email", { required: true })}
           />
           {errors.email && (
-            <span className="text-danger">This field is required</span>
+            <span className="text-red-500">This field is required</span>
           )}
           <br />
-          <TextField
-            label="Password"
-            variant="outlined"
-            fullWidth
+          <input
             type="password"
-            sx={{ mb: 2 }}
-            size="small"
+            placeholder="Password"
+            className="w-full p-2 mb-2 border border-gray-400 rounded"
             {...register("password", { required: true })}
           />
           {errors.password && (
-            <span className="text-danger">This field is required</span>
+            <span className="text-red-500">This field is required</span>
           )}
           <br />
-          <Button
-            sx={{
-              background: "purple",
-              boxShadow: "0px 0px 10px 2px rgba(128, 0, 128, 0.5)", // purple color box shadow
-            }}
-            variant="contained"
+          <button
             type="submit"
-            size="small"
+            className="bg-purple-500 text-white p-2 rounded disabled:bg-gray-400"
+            disabled={loading}
           >
             {loading ? (
-              <CircularProgress size={30} sx={{ color: "white" }} />
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-purple-500"></div>
             ) : (
               "Login"
             )}
-          </Button>
+          </button>
         </form>
-      </Card>
-    </Container>
+      </div>
+    </div>
   );
 };
 

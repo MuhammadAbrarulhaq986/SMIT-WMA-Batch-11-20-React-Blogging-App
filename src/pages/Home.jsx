@@ -1,13 +1,4 @@
 import React from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  CardMedia,
-  Avatar,
-} from "@mui/material";
 
 const blogs = [
   {
@@ -116,7 +107,7 @@ const blogs = [
     author: "Emily Davis",
     date: "2024-11-01",
     image: "https://picsum.photos/200/311",
-    authorImage: "https ://picsum.photos/200/111",
+    authorImage: "https://picsum.photos/200/111",
   },
   {
     title: "Blog 13",
@@ -230,90 +221,34 @@ const blogs = [
 
 const Home = () => {
   return (
-    <Box sx={{ padding: 4, margin: 2 }}>
-      <Typography
-        variant="h2"
-        sx={{
-          marginBottom: 2,
-          fontSize: 50,
-          fontWeight: 700,
-          fontFamily: "Montserrat",
-          textShadow: "2px 2px 4px rgba(170, 50, 220, 0.8)",
-          color: "#333",
-          textAlign: "center",
-        }}
-      >
+    <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 mt-20">
+      <h2 className="text-3xl font-bold mb-4 text-center text-gray-800">
         Latest Blogs
-      </Typography>
-      <Grid container spacing={4}>
-        {/*  Increased spacing to 4 */}
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {blogs.map((blog, index) => (
-          <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-            <Card
-              sx={{
-                height: "100%",
-                boxShadow: "0px 0px 10px rgba(170, 50, 220, 0.5)",
-                borderRadius: 10,
-                padding: 4, // Added padding to increase the size of the card
-                minHeight: 400, // Set a minimum height for the card
-              }}
-            >
-              <CardMedia
-                component="img"
-                height="200" // Increased the height of the image
-                image={blog.image}
-                alt={blog.title}
+          <div key={index} className="bg-white rounded shadow-md p-4">
+            <img
+              className="w-full h-64 object-cover mb-4"
+              src={blog.image}
+              alt={blog.title}
+            />
+            <h3 className="text-lg font-bold mb-2">{blog.title}</h3>
+            <p className="text-gray-700 text-sm">{blog.description}</p>
+            <div className="flex items-center mt-4">
+              <img
+                className="w-8 h-8 rounded-full mr-2"
+                src={blog.authorImage}
+                alt="Author"
               />
-              <CardContent>
-                <Typography
-                  variant="h5"
-                  component="div"
-                  sx={{
-                    fontSize: 20,
-                    fontWeight: 600,
-                    fontFamily: "Montserrat",
-                    textShadow: "1px 1px 2px rgba(170, 50, 220, 0.5)",
-                    color: "#333",
-                  }}
-                >
-                  {blog.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{
-                    fontSize: 16,
-                    fontWeight: 400,
-                    fontFamily: "Open Sans",
-                    color: "#666",
-                  }}
-                >
-                  {blog.description}
-                </Typography>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Avatar
-                    src={blog.authorImage}
-                    sx={{ width: 30, height: 30, marginRight: 1 }}
-                  />
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                      fontSize: 14,
-                      fontWeight: 400,
-                      fontFamily: "Open Sans",
-                      color: "#666",
-                    }}
-                  >
-                    By {blog.author} on {blog.date}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+              <span className="text-gray-700 text-sm">
+                By {blog.author} on {blog.date}
+              </span>
+            </div>
+          </div>
         ))}
-      </Grid>
-    </Box>
+      </div>
+    </div>
   );
 };
 

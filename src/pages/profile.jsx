@@ -1,66 +1,56 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getCurrentUser, init } from "../config/firebase/firebasemethods";
-import {
-  Box,
-  Typography,
-  Avatar,
-  Stack,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
-} from "@mui/material";
+// import React, { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { getCurrentUser, init } from "../config/firebase/firebasemethods";
 
-const Profile = () => {
-  const [user, setUser] = useState({});
-  const navigate = useNavigate();
+// const Profile = () => {
+//   const [user, setUser] = useState({});
+//   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      await init();
-      const currentUser = await getCurrentUser();
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        navigate("/login");
-      }
-    };
-    fetchUser();
-  }, [navigate]);
+//   useEffect(() => {
+//     const fetchUser = async () => {
+//       await init();
+//       const currentUser = await getCurrentUser();
+//       if (currentUser) {
+//         setUser(currentUser);
+//       } else {
+//         navigate("/login");
+//       }
+//     };
+//     fetchUser();
+//   }, [navigate]);
 
-  return (
-    <Box
-      sx={{
-        padding: 4,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <Typography variant="h4" sx={{ marginBottom: 2 }}>
-        Profile
-      </Typography>
-      <Avatar
-        src={user.photoURL}
-        alt="Profile Picture"
-        sx={{ width: 100, height: 100, marginBottom: 2 }}
-      />
-      <Stack direction="column" spacing={1}>
-        <Typography variant="h6">Email: {user.email}</Typography>
-        <Typography variant="h6">Username: {user.displayName}</Typography>
-      </Stack>
-      <ImageList sx={{ width: 500, height: 450 }}>
-        <ImageListItem key={user.email}>
-          <img src={user.photoURL} alt={user.displayName} />
-          <ImageListItemBar
-            title={user.displayName}
-            subtitle={user.email}
-            actionIcon={<Avatar alt={user.displayName} src={user.photoURL} />}
-          />
-        </ImageListItem>
-      </ImageList>
-    </Box>
-  );
-};
+//   return (
+//     <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 mt-20 flex flex-col items-center">
+//       <h2 className="text-2xl font-bold mb-4">Profile</h2>
+//       <img
+//         className="w-24 h-24 rounded-full mb-4"
+//         src={user.photoURL}
+//         alt="Profile Picture"
+//       />
+//       <div className="flex flex-col space-y-2">
+//         <p className="text-lg font-bold">Email: {user.email}</p>
+//         <p className="text-lg font-bold">Username: {user.displayName}</p>
+//       </div>
+//       <div className="w-500 h-450 mt-4">
+//         <img
+//           className="w-full h-full object-cover"
+//           src={user.photoURL}
+//           alt={user.displayName}
+//         />
+//         <div className="flex justify-between items-center p-2 bg-gray-100">
+//           <div>
+//             <h3 className="text-lg font-bold">{user.displayName}</h3>
+//             <p className="text-sm">{user.email}</p>
+//           </div>
+//           <img
+//             className="w-8 h-8 rounded-full"
+//             src={user.photoURL}
+//             alt={user.displayName}
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
-export default Profile;
+// export default Profile;
