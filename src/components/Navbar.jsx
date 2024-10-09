@@ -55,6 +55,7 @@ const Navbar = () => {
   // Define the function to handle logout
   const logoutUser = async () => {
     try {
+      console.log(logoutUser);
       // Sign out the user
       await signOutUser();
 
@@ -85,13 +86,14 @@ const Navbar = () => {
     { label: "Dashboard", link: "/dashboard" },
     { label: "Profile", link: "/profile" },
     { label: "Home", link: "/" },
+    // { label: "Logout ", link: "/" },
   ];
 
-  // Update the authItems state when the isUser   state changes
+  // Update the authItems state when the isUser    state changes
   useEffect(() => {
     const authItems = [];
     if (isUser) {
-      authItems.push({ label: "Logout", onClick: logoutUser });
+      authItems.push({ label: "Logout", onClick: () => logoutUser() });
     } else {
       authItems.push(
         { label: "Login", link: "/login", onClick: () => navigate("/login") },
@@ -103,9 +105,9 @@ const Navbar = () => {
       );
     }
     setAuthItems(authItems);
-  }, [isUser, navigate]);
+  }, [isUser, navigate, logoutUser]);
 
-  // Update the isUser   state when the user logs in
+  // Update the isUser    state when the user logs in
   useEffect(() => {
     const checkUser = async () => {
       // Initialize the Firebase app
@@ -123,7 +125,7 @@ const Navbar = () => {
       }
     };
     checkUser();
-  }, [navigate]);
+  }, [navigate, logoutUser]);
 
   // Return the JSX for the Navbar component
   return (
@@ -236,9 +238,7 @@ const Navbar = () => {
             {authItems.map((item, index) => (
               <Button
                 key={index}
-                onClick={
-                  item.onClick ? item.onClick : () => navigate(item.link)
-                }
+                onClick={item.onClick}
                 sx={{
                   my: 2,
                   display: "block",
