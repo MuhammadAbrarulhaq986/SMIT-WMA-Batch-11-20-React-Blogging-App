@@ -3,8 +3,10 @@ import { auth } from "../config/firebase/firebaseconfig";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { addDatainDb, signInUser } from "../config/firebase/firebasemethods";
+import { onAuthStateChanged } from "firebase/auth";
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setloading] = useState(false);
 
   useEffect(() => {
     const checkUser = () => {
@@ -12,7 +14,7 @@ const Login = () => {
         if (user) {
           const uid = user.uid;
           console.log("User Found");
-          navigate("/home");
+          navigate("/");
         } else {
           console.log("User Not Found");
         }
@@ -32,17 +34,17 @@ const Login = () => {
       password: "",
     },
   });
-  // Handling Form Submit 
+  // Handling Form Submit
   const handleLogin = async (data) => {
     setLoading(true);
     try {
-      const user = await signInUser(data?.email , data?.password);
+      const user = await signInUser(data?.email, data?.password);
       console.log("Sign In Successfully" + user.uid);
-    }catch(error){
+    } catch (error) {
       console.log(error);
-    }finally{
+    } finally {
       reset();
-      navigate("/home");
+      navigate("/");
     }
   };
 
