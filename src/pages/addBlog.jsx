@@ -1,19 +1,19 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   addDatainDb,
   imageDownloadUrl,
   signUpUser,
   uploadImage,
 } from "../config/firebase/firebasemethods";
-import { data } from "autoprefixer";
 // Component
-const Register = () => {
+const CreateBlog = () => {
   const navigate = useNavigate();
-
+  const params = useParams();
+  const { userId } = params;
   const {
-    register,
+    CreateBlog,
     handleSubmit,
     watch,
     formState: { errors },
@@ -22,7 +22,7 @@ const Register = () => {
 
   const [registrationStatus, setRegistrationStatus] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [ifRegistrationSuccess, setIfRegistrationSuccess] = useState(false);
+  const [ifBlogSuccess, setIfBlogSuccess] = useState(false);
 
   // Handle Form Submission
   const onSubmit = async (data) => {
@@ -30,11 +30,15 @@ const Register = () => {
     const image = data.profileImage[0];
     console.log(image);
 
+    const generateId = () => {
+      const randomId = [];
+      for (let i = 0; i < 22; i++) {
+        const randomNumber = Math.floor(Math.random() * 10);
+        randomId.push(randomNumber);
+      }
+      return randomId.join("");
+    };
     try {
-      // Sign IN USer
-      const user = await signUpUser(data.email, data.password);
-      console.log(user);
-
       // Upload Image
       const imageUpload = await uploadImage(
         "profileImages",
@@ -43,15 +47,17 @@ const Register = () => {
       );
       const imageUrl = await imageDownloadUrl("profileImages", image?.name);
       console.log(imageUrl);
-      // USer In Database
-      const dataInDb = await addDatainDb("users", user.uid, {
-        uid: user?.uid,
-        name: data?.name,
-        email: data.email,
-        profileImage: imageUrl,
+      const id = generateId();
+      // Blog In Database
+      const dataInDb = await addDatainDb("blogs", id, {
+        blogId: id,
+        title: data?.title,
+        description: data.description,
+        image: imageUrl,
+        authorUid: userId,
       });
       setRegistrationStatus(true);
-      setIfRegistrationSuccess(true);
+      setIfBlogSuccess(true);
     } catch (error) {
       console.log(error);
     } finally {
@@ -66,14 +72,14 @@ const Register = () => {
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="max-w-md p-4 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">CreateBlog</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
           <div>
             <input
               type="text"
-              placeholder="Full Name"
+              placeholder="Enter Blog Title"
               className="w-full p-2  border border-gray-400 rounded"
-              {...register("name", { required: true })}
+              {...register("title", { required: true })}
             />
             {errors.name && (
               <span className="text-red-500 text-[14px] font-semibold">
@@ -82,26 +88,14 @@ const Register = () => {
             )}
           </div>
           <div>
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full p-2  border border-gray-400 rounded"
-              {...register("email", { required: true })}
+            <textarea
+              name="description"
+              {...register("description", { required: true })}
+              rows={6}
+              className="w-full p-2 border border-gray-400 rounded"
+              placeholder="Enter blog description"
             />
             {errors.email && (
-              <span className="text-red-500 text-[14px] font-semibold">
-                This field is required
-              </span>
-            )}
-          </div>
-          <div>
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full p-2  border border-gray-400 rounded"
-              {...register("password", { required: true })}
-            />
-            {errors.password && (
               <span className="text-red-500 text-[14px] font-semibold">
                 This field is required
               </span>
@@ -112,7 +106,7 @@ const Register = () => {
               type="file"
               placeholder="Enter your profile picture"
               className="w-full p-2  border border-gray-400 rounded"
-              {...register("profileImage", { required: true })}
+              {...CreateBlog("profileImage", { required: true })}
             />
             {errors.profileImage && (
               <span className="text-red-500 text-[14px] font-semibold">
@@ -128,18 +122,18 @@ const Register = () => {
             {loading ? (
               <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-purple-500"></div>
             ) : (
-              "Register"
+              "CreateBlog"
             )}
           </button>
           <div>
             {registrationStatus ? (
-              ifRegistrationSuccess ? (
+              ifBlogSuccess ? (
                 <span className="text-[14px] text-green-500 font-semibold">
-                  Registered Successfully
+                  Blog Created Successfully
                 </span>
               ) : (
                 <span className="text-[14px] text-red-500 font-semibold">
-                  Registration Failed
+                  Creation Failed
                 </span>
               )
             ) : null}
@@ -150,4 +144,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default CreateBlog;

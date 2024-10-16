@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "../config/firebase/firebaseconfig";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { addDatainDb, signInUser } from "../config/firebase/firebasemethods";
 import { onAuthStateChanged } from "firebase/auth";
 const Login = () => {
@@ -73,6 +73,9 @@ const Login = () => {
             <span className="text-red-500">This field is required</span>
           )}
           <br />
+          <p>Don't have an account ? <Link to={"/register"}>
+           Register
+          </Link></p>
           <button
             type="submit"
             className="bg-purple-500 text-white p-2 rounded disabled:bg-gray-400"
