@@ -49,47 +49,59 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <div className="max-w-md p-4 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-        <form onSubmit={handleSubmit(handleLogin)}>
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full p-2 mb-2 border border-gray-400 rounded"
-            {...register("email", { required: true })}
-          />
-          {errors.email && (
-            <span className="text-red-500">This field is required</span>
-          )}
-          <br />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-2 mb-2 border border-gray-400 rounded"
-            {...register("password", { required: true })}
-          />
-          {errors.password && (
-            <span className="text-red-500">This field is required</span>
-          )}
-          <br />
-          <p>Don't have an account ? <Link to={"/register"}>
-           Register
-          </Link></p>
-          <button
-            type="submit"
-            className="bg-purple-500 text-white p-2 rounded disabled:bg-gray-400"
-            disabled={loading}
-          >
-            {loading ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-purple-500"></div>
-            ) : (
-              "Login"
+    <>
+      <div className="h-screen flex justify-center items-center ">
+        <div className="max-w-md p-6  shadow-lg rounded-lg border border-black bg-white">
+          <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+            Login
+          </h2>
+          <form onSubmit={handleSubmit(handleLogin)}>
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              {...register("email", { required: true })}
+            />
+            {errors.email && (
+              <span className="text-red-500 text-sm mb-2">
+                This field is required
+              </span>
             )}
-          </button>
-        </form>
+            <input
+              type="password"
+              placeholder="Password"
+              className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              {...register("password", { required: true })}
+            />
+            {errors.password && (
+              <span className="text-red-500 text-sm mb-2">
+                This field is required
+              </span>
+            )}
+            <p className="text-center text-black mb-4">
+              Don't have an account?{" "}
+              <Link
+                to={"/register"}
+                className="text-purple-600 hover:underline font-bold transition duration-100 hover:font-extrabold"
+              >
+                Register
+              </Link>
+            </p>
+            <button
+              type="submit"
+              className="w-full bg-purple-600 text-white p-3 rounded-lg transition duration-200 hover:bg-purple-700 disabled:bg-gray-400"
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+              ) : (
+                "Login"
+              )}
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

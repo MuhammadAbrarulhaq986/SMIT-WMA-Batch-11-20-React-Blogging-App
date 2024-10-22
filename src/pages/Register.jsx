@@ -64,89 +64,94 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <div className="max-w-md p-4 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-center">Register</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-          <div>
-            <input
-              type="text"
-              placeholder="Full Name"
-              className="w-full p-2  border border-gray-400 rounded"
-              {...register("name", { required: true })}
-            />
-            {errors.name && (
-              <span className="text-red-500 text-[14px] font-semibold">
-                This field is required
-              </span>
-            )}
-          </div>
-          <div>
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full p-2  border border-gray-400 rounded"
-              {...register("email", { required: true })}
-            />
-            {errors.email && (
-              <span className="text-red-500 text-[14px] font-semibold">
-                This field is required
-              </span>
-            )}
-          </div>
-          <div>
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full p-2  border border-gray-400 rounded"
-              {...register("password", { required: true })}
-            />
-            {errors.password && (
-              <span className="text-red-500 text-[14px] font-semibold">
-                This field is required
-              </span>
-            )}
-          </div>
-          <div>
-            <input
-              type="file"
-              placeholder="Enter your profile picture"
-              className="w-full p-2  border border-gray-400 rounded"
-              {...register("profileImage", { required: true })}
-            />
-            {errors.profileImage && (
-              <span className="text-red-500 text-[14px] font-semibold">
-                This field is required
-              </span>
-            )}
-          </div>
-          <button
-            type="submit"
-            className="bg-purple-500 text-white p-2 rounded disabled:bg-gray-400"
-            disabled={loading}
+    <>
+      <div className="h-screen flex justify-center items-center ">
+        <div className="max-w-md p-6  shadow-lg rounded-lg border border-black bg-white">
+          <h2 className="text-3xl font-bold mb-6 text-center text-black">
+            Register
+          </h2>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
           >
-            {loading ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-purple-500"></div>
-            ) : (
-              "Register"
-            )}
-          </button>
-          <div>
-            {registrationStatus ? (
-              ifRegistrationSuccess ? (
-                <span className="text-[14px] text-green-500 font-semibold">
-                  Registered Successfully
+            <div>
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="w-full p-3 border text-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                {...register("name", { required: true })}
+              />
+              {errors.name && (
+                <span className="text-red-500 text-sm">
+                  This field is required
                 </span>
+              )}
+            </div>
+            <div>
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                {...register("email", { required: true })}
+              />
+              {errors.email && (
+                <span className="text-red-500 text-sm">
+                  This field is required
+                </span>
+              )}
+            </div>
+            <div>
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                {...register("password", { required: true })}
+              />
+              {errors.password && (
+                <span className="text-red-500 text-sm">
+                  This field is required
+                </span>
+              )}
+            </div>
+            <div>
+              <input
+                type="file"
+                className="w-full p-3 border border-gray-300 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                {...register("profileImage", { required: true })}
+              />
+              {errors.profileImage && (
+                <span className="text-red-500 text-sm">
+                  This field is required
+                </span>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-purple-600 text-white p-3 rounded-lg transition duration-200 hover:bg-purple-700 disabled:bg-gray-400"
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
               ) : (
-                <span className="text-[14px] text-red-500 font-semibold">
-                  Registration Failed
-                </span>
-              )
-            ) : null}
-          </div>
-        </form>
+                "Register"
+              )}
+            </button>
+            <div>
+              {registrationStatus &&
+                (ifRegistrationSuccess ? (
+                  <span className="text-sm text-green-500 font-semibold">
+                    Registered Successfully
+                  </span>
+                ) : (
+                  <span className="text-sm text-red-500 font-semibold">
+                    Registration Failed
+                  </span>
+                ))}
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import { getSingleData, signOutUser } from "../config/firebase/firebasemethods";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { Button } from "react-bulma-components";
+import image from "./../image/logo.png";
 function Navbar() {
   const navigate = useNavigate();
   const [isUser, setIsUser] = useState(false);
@@ -49,55 +49,63 @@ function Navbar() {
     <>
       <div className="navbar bg-base-100">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">daisyUI</a>
+          <a href="/" className="btn btn-ghost text-xl text-white font-bold">
+            <img
+              src={image}
+              alt="Blogging App Logo"
+              className="w-10 h-10 rounded-[30px]"
+            />{" "}
+            Blogging app
+          </a>
         </div>
-        {isUser ? 
-        <div className="flex-none">
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
+        {isUser ? (
+          <div className="flex-none">
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
               ></div>
-          </div>
-          <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar"
-              >
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src={userData?.profileImage}
-                  />
-              </div>
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            <div className="dropdown dropdown-end">
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
               >
-              <li>
-                <Link
-                  to={`/profile/${userData?.uid}`}
-                  className="justify-between"
+                <div className="w-10 rounded-full">
+                  <img
+                    alt="Tailwind CSS Navbar component"
+                    src={userData?.profileImage}
+                  />
+                </div>
+              </div>
+              <ul
+                tabIndex={0}
+                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+              >
+                <li>
+                  <Link
+                    to={`/profile/${userData?.uid}`}
+                    className="justify-between"
                   >
-                  Profile
-                  <span className="badge">New</span>
-                </Link>
-              </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <button onClick={logOut}>Logout</button>
-              </li>
-            </ul>
+                    Profile
+                    <span className="badge">New</span>
+                  </Link>
+                </li>
+                <li>
+                  <a>Settings</a>
+                </li>
+                <li>
+                  <button onClick={logOut}>Logout</button>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-         : <button onClick={()=> navigate("/login")}>
-          LogIn</button>}
+        ) : (
+          <button onClick={() => navigate("/login")}>LogIn</button>
+        )}
       </div>
-      </>
+    </>
   );
 }
 

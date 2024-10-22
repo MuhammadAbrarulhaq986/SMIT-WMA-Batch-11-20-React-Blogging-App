@@ -78,7 +78,7 @@ const CreateBlog = () => {
             <input
               type="text"
               placeholder="Enter Blog Title"
-              className="w-full p-2  border border-gray-400 rounded"
+              className="w-full p-2  border border-black rounded"
               {...register("title", { required: true })}
             />
             {errors.name && (
@@ -92,7 +92,7 @@ const CreateBlog = () => {
               name="description"
               {...register("description", { required: true })}
               rows={6}
-              className="w-full p-2 border border-gray-400 rounded"
+              className="w-full p-2 border border-black rounded"
               placeholder="Enter blog description"
             />
             {errors.email && (
@@ -105,7 +105,7 @@ const CreateBlog = () => {
             <input
               type="file"
               placeholder="Enter your profile picture"
-              className="w-full p-2  border border-gray-400 rounded"
+              className="w-full p-2  border border-red-500 rounded"
               {...CreateBlog("profileImage", { required: true })}
             />
             {errors.profileImage && (
