@@ -66,8 +66,18 @@ const Register = () => {
   return (
     <>
       <div className="h-screen flex justify-center items-center ">
-        <div className="max-w-md p-6  shadow-lg rounded-lg border border-black bg-white">
-          <h2 className="text-3xl font-bold mb-6 text-center text-black">
+        <div
+          className="max-w-md p-6  shadow-lg rounded-lg border border-black bg-white"
+          style={{
+            boxShadowShadow: "0px 0px 20px purple",
+            border: "3px solid black",
+            borderRadius: 20,
+          }}
+        >
+          <h2
+            className="text-3xl font-bold mb-6 p-2 text-center text-white bg-black"
+            style={{ textShadow: "0px 0px 20px purple", borderRadius: 10 }}
+          >
             Register
           </h2>
           <form
@@ -91,7 +101,7 @@ const Register = () => {
               <input
                 type="email"
                 placeholder="Email"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-3 border text-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 {...register("email", { required: true })}
               />
               {errors.email && (
@@ -104,7 +114,7 @@ const Register = () => {
               <input
                 type="password"
                 placeholder="Password"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-3 border text-white border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                 {...register("password", { required: true })}
               />
               {errors.password && (
@@ -116,7 +126,11 @@ const Register = () => {
             <div>
               <input
                 type="file"
-                className="w-full p-3 border border-gray-300 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-3 border  border-black text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                style={{
+                  background: "black",
+                  color: "white",
+                }}
                 {...register("profileImage", { required: true })}
               />
               {errors.profileImage && (
@@ -127,7 +141,7 @@ const Register = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-purple-600 text-white p-3 rounded-lg transition duration-200 hover:bg-purple-700 disabled:bg-gray-400"
+              className="w-full font-semibold   bg-purple-600 text-white p-3 rounded-lg transition duration-200 hover:bg-purple-700 disabled:bg-gray-400"
               disabled={loading}
             >
               {loading ? (

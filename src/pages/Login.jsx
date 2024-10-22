@@ -36,7 +36,7 @@ const Login = () => {
   });
   // Handling Form Submit
   const handleLogin = async (data) => {
-    setLoading(true);
+    setloading(true);
     try {
       const user = await signInUser(data?.email, data?.password);
       console.log("Sign In Successfully" + user.uid);
@@ -51,15 +51,25 @@ const Login = () => {
   return (
     <>
       <div className="h-screen flex justify-center items-center ">
-        <div className="max-w-md p-6  shadow-lg rounded-lg border border-black bg-white">
-          <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+        <div
+          className="max-w-md p-6  shadow-lg rounded-lg border border-black bg-white"
+          style={{
+            boxShadowShadow: "0px 0px 20px purple",
+            border: "3px solid black",
+            borderRadius: 20,
+          }}
+        >
+          <h2
+            className="text-3xl font-bold mb-6 p-2 text-center text-white bg-black"
+            style={{ textShadow: "0px 0px 20px purple", borderRadius: 10 }}
+          >
             Login
           </h2>
           <form onSubmit={handleSubmit(handleLogin)}>
             <input
               type="email"
               placeholder="Email"
-              className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 mb-4 border border-gray-300 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               {...register("email", { required: true })}
             />
             {errors.email && (
@@ -70,7 +80,7 @@ const Login = () => {
             <input
               type="password"
               placeholder="Password"
-              className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 mb-4 border border-gray-300    text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               {...register("password", { required: true })}
             />
             {errors.password && (
@@ -78,7 +88,7 @@ const Login = () => {
                 This field is required
               </span>
             )}
-            <p className="text-center text-black mb-4">
+            <p className="text-center text-black mb-4 font-semibold">
               Don't have an account?{" "}
               <Link
                 to={"/register"}
@@ -89,7 +99,7 @@ const Login = () => {
             </p>
             <button
               type="submit"
-              className="w-full bg-purple-600 text-white p-3 rounded-lg transition duration-200 hover:bg-purple-700 disabled:bg-gray-400"
+              className="w-full font-semibold  bg-purple-600 text-white p-3 rounded-lg transition duration-200 hover:bg-purple-700 disabled:bg-gray-400"
               disabled={loading}
             >
               {loading ? (

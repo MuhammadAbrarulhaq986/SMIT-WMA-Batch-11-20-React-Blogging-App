@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  /* margin: 5px;
+  padding: 5px; */
+}
+
 body {
   overflow-x: hidden;
   font-family: sans-serif;
@@ -9,8 +14,22 @@ body {
   background-image: url("./image/background.webp");
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
+  background-repeat: repeat;
   margin: 0;
   background-attachment: fixed;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
 }

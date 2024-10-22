@@ -15,6 +15,7 @@ import {
   collection,
   deleteDoc,
 } from "firebase/firestore";
+
 // Sign Up User
 const signUpUser = (email, password) => {
   return new Promise((resolve, reject) => {
@@ -125,6 +126,7 @@ const getSingleData = (collectionName, id) => {
       });
   });
 };
+
 const updateDocument = (collectionName, id, obj) => {
   return new Promise((resolve, reject) => {
     const docRef = doc(db, collectionName, id);

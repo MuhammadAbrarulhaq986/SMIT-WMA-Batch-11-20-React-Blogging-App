@@ -47,14 +47,17 @@ function Navbar() {
   };
   return (
     <>
-      <div className="navbar bg-base-100">
+      <div
+        className="navbar  bg-purple-900 text-white font-extrabold "
+        style={{ border: "4px solid black", borderRadius: 20, marginTop: 10 }}
+      >
         <div className="flex-1">
           <a href="/" className="btn btn-ghost text-xl text-white font-bold">
             <img
               src={image}
               alt="Blogging App Logo"
               className="w-10 h-10 rounded-[30px]"
-            />{" "}
+            />
             Blogging app
           </a>
         </div>
@@ -81,7 +84,7 @@ function Navbar() {
               </div>
               <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                className=" text-xl menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
               >
                 <li>
                   <Link
@@ -92,17 +95,33 @@ function Navbar() {
                     <span className="badge">New</span>
                   </Link>
                 </li>
+                {/* ****************************************** */}
+                {/* <li>
+                  <Link
+                    to={`/createBlog/${userData?.uid}`}
+                    className="justify-between"
+                  >
+                    Create Blog
+                  </Link>
+                </li> */}
                 <li>
                   <a>Settings</a>
                 </li>
                 <li>
-                  <button onClick={logOut}>Logout</button>
+                  <button className="btn btn-ghost text-xl" onClick={logOut}>
+                    Logout
+                  </button>
                 </li>
               </ul>
             </div>
           </div>
         ) : (
-          <button onClick={() => navigate("/login")}>LogIn</button>
+          <button
+            className="btn btn-ghost text-xl"
+            onClick={() => navigate("/login")}
+          >
+            LogIn
+          </button>
         )}
       </div>
     </>
