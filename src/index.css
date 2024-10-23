@@ -7,7 +7,7 @@
   padding: 5px; */
 }
 
-body {
+/* body {
   overflow-x: hidden;
   font-family: sans-serif;
   background-color: black;
@@ -17,7 +17,7 @@ body {
   background-repeat: repeat;
   margin: 0;
   background-attachment: fixed;
-}
+} */
 
 @keyframes pulse {
   0% {

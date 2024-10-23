@@ -9,6 +9,7 @@ function Navbar() {
   const navigate = useNavigate();
   const [isUser, setIsUser] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [currentUseId, setCurrentUserId] = useState(null);
   const user = auth;
 
   useEffect(() => {
@@ -18,6 +19,7 @@ function Navbar() {
           if (user) {
             console.log("User Found");
             const uid = user.uid;
+            setCurrentUserId(uid);
             const reponse = await getSingleData("users", uid);
             setUserData(reponse);
             console.log(userData);
@@ -87,6 +89,11 @@ function Navbar() {
                 className=" text-xl menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
               >
                 <li>
+                  <Link to={"/"} className="justify-between">
+                    Home
+                  </Link>
+                </li>
+                <li>
                   <Link
                     to={`/profile/${userData?.uid}`}
                     className="justify-between"
@@ -96,17 +103,17 @@ function Navbar() {
                   </Link>
                 </li>
                 {/* ****************************************** */}
-                {/* <li>
+                <li>
                   <Link
-                    to={`/createBlog/${userData?.uid}`}
+                    to={`/createBlog/${currentUseId}`}
                     className="justify-between"
                   >
                     Create Blog
                   </Link>
-                </li> */}
-                <li>
-                  <a>Settings</a>
                 </li>
+                {/* <li>
+                  <a>Settings</a>
+                </li> */}
                 <li>
                   <button className="btn btn-ghost text-xl" onClick={logOut}>
                     Logout

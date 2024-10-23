@@ -1,31 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   addDatainDb,
+  getSingleData,
   imageDownloadUrl,
-  signUpUser,
   uploadImage,
 } from "../config/firebase/firebasemethods";
-
-
 
 // Component
 const CreateBlog = () => {
   const navigate = useNavigate();
   const params = useParams();
+  const [ifTryCreateBlog, setIfTryCreateBlog] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [ifBlogSuccess, setIfBlogSuccess] = useState(false);
+  const [userData, setUserData] = useState(null);
   const { userId } = params;
+  useEffect(() => {
+    (async () => {
+      const user = await getSingleData("users", userId);
+      setUserData(user);
+    })();
+  }, []);
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
   const {
-    CreateBlog,
     handleSubmit,
+    register,
     watch,
     formState: { errors },
     reset,
   } = useForm();
-
-  const [registrationStatus, setRegistrationStatus] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [ifBlogSuccess, setIfBlogSuccess] = useState(false);
 
   // Handle Form Submission
   const onSubmit = async (data) => {
@@ -57,9 +64,14 @@ const CreateBlog = () => {
         title: data?.title,
         description: data.description,
         image: imageUrl,
-        authorUid: userId,
+        author: {
+          uid: userId,
+          image: userData?.profileImage,
+          name: userData?.name,
+          email: userData?.email,
+        },
       });
-      setRegistrationStatus(true);
+      setIfTryCreateBlog(true);
       setIfBlogSuccess(true);
     } catch (error) {
       console.log(error);
@@ -73,19 +85,21 @@ const CreateBlog = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center">
-      <div className="max-w-md p-4 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-bold mb-4 text-center">CreateBlog</h2>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+    <div className="h-screen flex justify-center items-center ">
+      <div className="max-w-md w-full p-6  rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold mb-4 text-center bg-white text-gray-800">
+          CreateBlog
+        </h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div>
             <input
               type="text"
               placeholder="Enter Blog Title"
-              className="w-full p-2  border border-black rounded"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               {...register("title", { required: true })}
             />
-            {errors.name && (
-              <span className="text-red-500 text-[14px] font-semibold">
+            {errors.title && (
+              <span className="text-red-500 text-sm font-semibold">
                 This field is required
               </span>
             )}
@@ -93,13 +107,13 @@ const CreateBlog = () => {
           <div>
             <textarea
               name="description"
-              {...register("description", { required: true })}
               rows={6}
-              className="w-full p-2 border border-black rounded"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Enter blog description"
+              {...register("description", { required: true })}
             />
-            {errors.email && (
-              <span className="text-red-500 text-[14px] font-semibold">
+            {errors.description && (
+              <span className="text-red-500 text-sm font-semibold">
                 This field is required
               </span>
             )}
@@ -107,35 +121,34 @@ const CreateBlog = () => {
           <div>
             <input
               type="file"
-              placeholder="Enter your profile picture"
-              className="w-full p-2  border border-red-500 rounded"
-              {...CreateBlog("profileImage", { required: true })}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              {...register("profileImage", { required: true })}
             />
             {errors.profileImage && (
-              <span className="text-red-500 text-[14px] font-semibold">
+              <span className="text-red-500 text-sm font-semibold">
                 This field is required
               </span>
             )}
           </div>
           <button
             type="submit"
-            className="bg-purple-500 text-white p-2 rounded disabled:bg-gray-400"
+            className="bg-purple-500 text-white p-3 rounded-lg hover:bg-purple-600 transition duration-200 disabled:bg-gray-400"
             disabled={loading}
           >
             {loading ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-purple-500"></div>
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
             ) : (
-              "CreateBlog"
+              "Create Blog"
             )}
           </button>
           <div>
-            {registrationStatus ? (
+            {ifTryCreateBlog ? (
               ifBlogSuccess ? (
-                <span className="text-[14px] text-green-500 font-semibold">
+                <span className="text-sm text-green-500 font-semibold">
                   Blog Created Successfully
                 </span>
               ) : (
-                <span className="text-[14px] text-red-500 font-semibold">
+                <span className="text-sm text-red-500 font-semibold">
                   Creation Failed
                 </span>
               )
