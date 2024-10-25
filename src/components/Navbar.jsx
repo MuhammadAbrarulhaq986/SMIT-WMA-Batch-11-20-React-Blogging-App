@@ -78,10 +78,7 @@ function Navbar() {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src={userData?.profileImage}
-                  />
+                  <img alt={user.name} src={userData?.profileImage} />
                 </div>
               </div>
               <ul

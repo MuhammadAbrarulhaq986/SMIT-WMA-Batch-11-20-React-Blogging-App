@@ -7,9 +7,12 @@ import {
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
   const [userName, setUserName] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
+
   useEffect(() => {
     const fetchBlogs = async () => {
       const blogsData = await getAllDocuments("blogs");
+      console.log("Fetched blogs:", blogsData); // Check the fetched data
       setBlogs(blogsData);
       console.log(blogs);
     };
@@ -42,7 +45,14 @@ const Home = () => {
               }}
             />
             <h3 className=" text-white text-lg font-bold mb-2">{blog.title}</h3>
-            <p className="text-white text-sm">{blog.description}</p>
+            <p
+              className={`text-white ${
+                isExpanded ? "line-clamp-none" : "line-clamp-5"
+              } transition-all duration-300`}
+            >
+              {isExpanded ? blog.fullDescription : blog.description}
+            </p>
+
             <div className="flex items-center mt-4">
               <img
                 className="w-8 h-8 rounded-full mr-2"
